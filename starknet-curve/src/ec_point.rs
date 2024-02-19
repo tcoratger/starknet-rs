@@ -130,7 +130,7 @@ impl ops::Mul<&[bool]> for &AffinePoint {
     #[allow(clippy::suspicious_arithmetic_impl)]
     fn mul(self, rhs: &[bool]) -> Self::Output {
         let mut product = AffinePoint::identity();
-        for b in rhs.iter().rev() {
+        for b in rhs.iter().rev().skip_while(|b| !*b) {
             product.double_assign();
             if *b {
                 product += self;
@@ -279,7 +279,7 @@ impl ops::Mul<&[bool]> for &ProjectivePoint {
     #[allow(clippy::suspicious_arithmetic_impl)]
     fn mul(self, rhs: &[bool]) -> Self::Output {
         let mut product = ProjectivePoint::identity();
-        for b in rhs.iter().rev() {
+        for b in rhs.iter().rev().skip_while(|b| !*b) {
             product.double_assign();
             if *b {
                 product += self;
